@@ -81,22 +81,29 @@ class Frac:
     if type(frac2) in [int,float]:
       frac2 = Frac.of(frac2)
     return self * frac2._inv()
-      
-  # @classmethod
-  # def _floatToFrac(cls,fl):
-  #   """
-  #   takes a float
-  #   returns the reduced fraction that represents that float
-  #   using python's builtin .as_integer_ratio() method
-  #   """
-  #   if not isinstance(fl,float):
-  #     raise TypeError("The input must be a float!")
-  #   num,den = fl.as_integer_ratio()
-  #   return cls.of(num,den)
     
-  # def __eq__(self,frac2):
-  #   n1,d1,n2,d2 = self._num,self._den,frac2._num,frac2._den
-  #   return n1==n2 and d1==d2
+  def __eq__(self,frac2):
+    """
+    frac2 must be int, float or Frac
+    """
+    n1,d1 = self._num,self._den
+
+    if isinstance(frac2,int):
+      n2,d2 = frac2,1
+
+    if isinstance(frac2,float):
+      newFrac = Frac.of(frac2)
+      n2,d2 = newFrac._num, newFrac._den
+
+    if isinstance(frac2,Frac):
+      n2,d2 = frac2._num,frac2._den
+
+    if d1 != d2:
+      n1 *= d2
+      n2 *= d1
+
+    
+    return n1==n2
 
   @classmethod
   def sum(cls,*args):
